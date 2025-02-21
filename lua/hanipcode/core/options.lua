@@ -6,6 +6,7 @@ vim.g.mapleader = " "
 
 -- Set options
 vim.o.ignorecase = true
+vim.o.mouse = "a"
 vim.o.smartcase = true
 -- line number
 vim.o.number = true
@@ -37,3 +38,9 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
+
+vim.opt.foldcolumn = "0"
+vim.opt.foldtext = ""
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 1
+vim.opt.foldnestmax = 4

@@ -8,16 +8,27 @@ return {
 	},
 	config = function()
 		local telescope = require("telescope")
+		local actions = require("telescope.actions")
 
 		telescope.setup({
 			defaults = {
+				mappings = {
+					i = {
+						["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+					},
+					n = {
+						["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+					},
+				},
+				path_display = { "smart" },
 				layout_config = {
-					vertical = { height = 0.5 },
-					horizontal = { height = 0.5 },
+					vertical = { height = 0.8 },
+					horizontal = { height = 0.8 },
 				},
 			},
 		})
 		local builtin = require("telescope.builtin")
+
 		vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
 		vim.keymap.set("n", "<leader>pg", builtin.git_files, {})
 		vim.keymap.set("n", "<leader>pws", function()
@@ -28,9 +39,17 @@ return {
 			local word = vim.fn.expand("<cWORD>")
 			builtin.grep_string({ search = word })
 		end)
+		local defaultText = ""
 		vim.keymap.set("n", "<leader>ps", function()
-			builtin.grep_string({ search = vim.fn.input("Grep > ") })
-		end)
+			vim.ui.input({
+				prompt = ">Grep",
+				default = defaultText,
+				completion = nil,
+			}, function(word)
+				defaultText = word
+				builtin.grep_string({ search = word })
+			end)
+		end, { silent = true, noremap = true })
 		vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
 		vim.keymap.set("n", "<leader>p!", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
 	end,

@@ -11,6 +11,7 @@ return {
 		"hrsh7th/nvim-cmp",
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip",
+		"pmizio/typescript-tools.nvim",
 		"j-hui/fidget.nvim",
 	},
 
@@ -28,16 +29,21 @@ return {
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			ensure_installed = {
+				"clangd",
 				"lua_ls",
 				"rust_analyzer",
 				"gopls",
 			},
 			handlers = {
-				-- function(server_name) -- default handler (optional)
-				-- 	require("lspconfig")[server_name].setup({
-				-- 		capabilities = capabilities,
-				-- 	})
-				-- end,
+				function(server_name) -- default handler (optional)
+					require("lspconfig")[server_name].setup({
+						capabilities = capabilities,
+					})
+				end,
+
+				[""] = function()
+					require("typescript-tools").setup({})
+				end,
 
 				zls = function()
 					local lspconfig = require("lspconfig")
@@ -140,19 +146,14 @@ return {
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
-				local opts = { buffer = ev.buf, silent = true }
+				local opts = { buffer = ev.buf, silent = true, noremap = true }
 
 				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-				vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-				vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-				vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
-				vim.keymap.set("n", "<space>wl", function()
-					print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-				end, opts)
-				vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, opts)
+				vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, opts)
 				vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
 				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
@@ -163,12 +164,17 @@ return {
 				local keymap = vim.keymap
 
 				-- set keybinds
-				keymap.set("n", "<leader>pR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
+				keymap.set("n", "<leader>pr", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
 
+				keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
 				keymap.set("n", "<leader>pd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
 
 				keymap.set("n", "<leader>pi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
-				keymap.set("n", "<leader>pT", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+				keymap.set("n", "<leader>pt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+				keymap.set("n", "<leader>po", "<cmd>Telescope lsp_document_symbols<CR>", opts) -- show lsp document/buffer symbols
+				keymap.set("n", "<leader>pw", "<cmd>Telescope lsp_workspace_symbols<CR>", opts) -- show lsp workspace symbols
+				keymap.set("n", "<leader>pI", "<cmd>Telescope lsp_incoming_calls<CR>", opts) -- lsp incoming calls
+				keymap.set("n", "<leader>pO", "<cmd>Telescope lsp_outgoing_calls<CR>", opts)
 
 				keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 
