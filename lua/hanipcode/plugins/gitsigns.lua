@@ -61,17 +61,17 @@ return {
 		end
 
 		-- Navigation
-		map("n", "]s", function()
+		map("n", "<leader>]s", function()
 			if vim.wo.diff then
-				vim.cmd.normal({ "]c", bang = true })
+				vim.cmd.normal({ "<leader>]s", bang = true })
 			else
 				gitsigns.nav_hunk("next")
 			end
 		end)
 
-		map("n", "[s", function()
+		map("n", "<leader>[s", function()
 			if vim.wo.diff then
-				vim.cmd.normal({ "[s", bang = true })
+				vim.cmd.normal({ "<leader>[s", bang = true })
 			else
 				gitsigns.nav_hunk("prev")
 			end
@@ -87,7 +87,8 @@ return {
 			gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 		end)
 		map("n", "<leader>ga", gitsigns.stage_buffer)
-		map("n", "<leader>gsu", gitsigns.undo_stage_hunk)
+		map("n", "<leader>gua", gitsigns.undo_stage_buffer)
+		map("n", "<leader>gus", gitsigns.undo_stage_hunk)
 		map("n", "<leader>gR", gitsigns.reset_buffer)
 		map("n", "<leader>gp", gitsigns.preview_hunk)
 		map("n", "<leader>gb", function()
