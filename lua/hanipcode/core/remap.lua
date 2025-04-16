@@ -11,7 +11,7 @@ local function getOpts()
 end
 
 -- Mappings using getOpts function
-map("n", "<leader>q", ":bd<CR>", getOpts())
+map("n", "<leader>e", "<cmd>only<CR>", getOpts())
 map("n", "<leader>w", "<cmd>close<CR>", getOpts())
 map("n", "<C-d>", "<C-d>zz", getOpts())
 map("n", "<C-u>", "<C-u>zz", getOpts())
@@ -31,7 +31,6 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "<C-m>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz")
-vim.keymap.set({ "n", "i" }, "<C-s>", "<Esc><cmd>w<CR>", getOpts())
 
 vim.keymap.set("n", "<leader>sa", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 vim.keymap.set("n", "<leader>sr", [[:%s/\<<C-r><C-w>\>//gI<Left><Left><Left>]])

@@ -11,10 +11,12 @@ return {
 		"hrsh7th/nvim-cmp",
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip",
-		"pmizio/typescript-tools.nvim",
+		-- "pmizio/typescript-tools.nvim",
+		"yioneko/nvim-vtsls",
 		"j-hui/fidget.nvim",
 	},
 
+	-- create new function for switch context
 	config = function()
 		local cmp = require("cmp")
 		local cmp_lsp = require("cmp_nvim_lsp")
@@ -25,24 +27,68 @@ return {
 			cmp_lsp.default_capabilities()
 		)
 
-		require("fidget").setup({})
+		require("fidget").setup({
+			notification = {
+				window = {
+					winblend = 0,
+				},
+			},
+		})
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			ensure_installed = {
 				"clangd",
 				"lua_ls",
 				"rust_analyzer",
+				"vtsls",
 				"gopls",
+				"golangci_lint_ls",
+				"basedpyright",
 			},
+			automatic_installation = true,
 			handlers = {
-				function(server_name) -- default handler (optional)
-					require("lspconfig")[server_name].setup({
-						capabilities = capabilities,
-					})
-				end,
+				-- function(server_name) -- default handler (optional)lsp
+				-- 	require("lspconfig")[server_name].setup({
+				-- 		capabilities = capabilities,
+				-- 	})
+				-- end,
 
-				[""] = function()
-					require("typescript-tools").setup({})
+				["vtsls"] = function()
+					require("lspconfig.configs").vtsls = require("vtsls").lspconfig
+					require("lspconfig").vtsls.setup({
+						settings = {
+							typescript = {
+								inlayHints = {
+									includeInlayParameterNameHints = "all",
+									includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+									includeInlayFunctionParameterTypeHints = true,
+									includeInlayVariableTypeHints = true,
+									includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+									includeInlayPropertyDeclarationTypeHints = true,
+									includeInlayFunctionLikeReturnTypeHints = true,
+									includeInlayEnumMemberValueHints = true,
+									parameterNames = { enabled = "literals" },
+									parameterTypes = { enabled = true },
+									variableTypes = { enabled = true },
+									propertyDeclarationTypes = { enabled = true },
+									functionLikeReturnTypes = { enabled = true },
+									enumMemberValues = { enabled = true },
+								},
+							},
+							javascript = {
+								inlayHints = {
+									includeInlayParameterNameHints = "all",
+									includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+									includeInlayFunctionParameterTypeHints = true,
+									includeInlayVariableTypeHints = true,
+									includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+									includeInlayPropertyDeclarationTypeHints = true,
+									includeInlayFunctionLikeReturnTypeHints = true,
+									includeInlayEnumMemberValueHints = true,
+								},
+							},
+						},
+					})
 				end,
 
 				zls = function()
@@ -59,6 +105,24 @@ return {
 					})
 					vim.g.zig_fmt_parse_errors = 0
 					vim.g.zig_fmt_autosave = 0
+				end,
+
+				["gopls"] = function()
+					local lspconfig = require("lspconfig")
+					local cfg = require("go.lsp").config()
+					lspconfig.gopls.setup(cfg)
+				end,
+				["basedpyright"] = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.basedpyright.setup({})
+				end,
+				["golangci_lint_ls"] = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.golangci_lint_ls.setup({
+						init_options = {
+							command = { "golangci-lint", "run", "--out-format", "json" },
+						},
+					})
 				end,
 				["lua_ls"] = function()
 					local lspconfig = require("lspconfig")
@@ -80,6 +144,7 @@ return {
 		local mason_tool_installer = require("mason-tool-installer")
 		mason_tool_installer.setup({
 			ensure_installed = {
+				"golangci-lint",
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
 				"isort", -- python formatter
@@ -123,6 +188,7 @@ return {
 					end
 				end, { "i", "s" }),
 			}),
+
 			sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" }, -- For luasnip users.
@@ -149,10 +215,13 @@ return {
 				local opts = { buffer = ev.buf, silent = true, noremap = true }
 
 				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-				-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
 				vim.keymap.set({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, opts)
+				vim.keymap.set({ "n", "i" }, "<C-t>", function()
+					vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
+				end)
 				vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, opts)
 				vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
 				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
@@ -167,7 +236,7 @@ return {
 				keymap.set("n", "<leader>pr", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
 
 				keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
-				keymap.set("n", "<leader>pd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+				-- keymap.set("n", "<leader>pd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
 
 				keymap.set("n", "<leader>pi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
 				keymap.set("n", "<leader>pt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions

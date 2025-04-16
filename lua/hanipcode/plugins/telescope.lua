@@ -18,6 +18,18 @@ return {
 					},
 					n = {
 						["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+						["q"] = function()
+							local Path = require("plenary.path")
+							local action_state = require("telescope.actions.state")
+							local FileSharer = require("hanipcode.local.filesharer")
+
+							local selection = action_state.get_selected_entry()[1]
+							local cwd = vim.fn.getcwd()
+							local fullpath = cwd .. "/" .. selection
+							local relpath = Path:new(fullpath):make_relative()
+
+							FileSharer.share(fullpath, relpath)
+						end,
 					},
 				},
 				path_display = { "smart" },
@@ -52,5 +64,11 @@ return {
 		end, { silent = true, noremap = true })
 		vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
 		vim.keymap.set("n", "<leader>p!", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
+		-- vim.keymap.set("n", "<leader>pv", "<cmd>Telescope neoclip<cr>", { desc = "Find clipboard" })
+		vim.keymap.set("n", "<leader>pd", function()
+			local harpooned = require("hanipcode.local.harpooned")
+			harpooned.harpoon_pickers()
+		end)
+		vim.keymap.set("n", "<leader>f", builtin.current_buffer_fuzzy_find, {})
 	end,
 }

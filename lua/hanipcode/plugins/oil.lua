@@ -4,6 +4,22 @@ return {
 		local oil = require("oil")
 		oil.setup({
 			default_file_explorer = true,
+			keymaps = {
+				["q"] = {
+					desc = "share file with code companion",
+					callback = function()
+						local oil = require("oil")
+						local Path = require("plenary.path")
+						local FileSharer = require("hanipcode.local.filesharer")
+
+						local cur_dir = oil.get_current_dir()
+						local fullpath = cur_dir .. oil.get_cursor_entry().name
+						local relpath = Path:new(fullpath):make_relative()
+
+						FileSharer.share(fullpath, relpath)
+					end,
+				},
+			},
 		})
 		vim.keymap.set("n", "<leader>o", "", {
 			noremap = true,
