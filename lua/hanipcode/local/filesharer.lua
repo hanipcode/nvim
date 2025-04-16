@@ -5,6 +5,21 @@ local cc = require("codecompanion")
 local fmt = string.format
 local constants = require("codecompanion.config").config.constants
 
+function M.share_dir(dir_path)
+	local scandir = require("plenary.scandir")
+
+	local files = scandir.scan_dir(dir_path, {
+		hidden = true, -- include dotfiles
+		depth = nil, -- nil = infinite
+		add_dirs = false, -- exclude directories from result
+	})
+
+	for _, file in ipairs(files) do
+		local relpath = Path:new(file):make_relative()
+		M.share(file, relpath)
+	end
+end
+
 function M.share(fullpath, relpath)
 	local path = Path:new(fullpath)
 	local ok, content = pcall(function()

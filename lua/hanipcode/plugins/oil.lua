@@ -13,7 +13,17 @@ return {
 						local FileSharer = require("hanipcode.local.filesharer")
 
 						local cur_dir = oil.get_current_dir()
-						local fullpath = cur_dir .. oil.get_cursor_entry().name
+						local entry = oil.get_cursor_entry()
+						if entry == nil then
+							vim.notify("Entry not found", vim.log.levels.ERROR)
+							return
+						end
+						local fullpath = cur_dir .. entry.name
+						if entry.type == "directory" then
+							FileSharer.share_dir(fullpath)
+							return
+						end
+
 						local relpath = Path:new(fullpath):make_relative()
 
 						FileSharer.share(fullpath, relpath)
