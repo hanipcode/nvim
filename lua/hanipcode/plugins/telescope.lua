@@ -65,7 +65,7 @@ return {
 		vim.keymap.set("n", "<leader>vh", builtin.help_tags, {})
 		vim.keymap.set("n", "<leader>p!", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
 		vim.keymap.set("n", "<leader>pv", "<cmd>Telescope neoclip<cr>", { desc = "Find clipboard" })
-		vim.keymap.set("n", "<leader>pa", builtin.oldfiles, { desc = "Find clipboard" })
+		vim.keymap.set("n", "<leader>po", builtin.oldfiles, { desc = "Find clipboard" })
 		vim.keymap.set("n", "<leader>pd", function()
 			local harpooned = require("hanipcode.local.harpooned")
 			harpooned.harpoon_pickers()

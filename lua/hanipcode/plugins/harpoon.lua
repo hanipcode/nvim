@@ -7,6 +7,10 @@ return {
 		-- REQUIRED
 		local h = require("hanipcode.local.harpooned")
 		harpoon:setup({
+			settings = {
+				save_on_toggle = true,
+				sync_on_ui_close = true,
+			},
 			default = {
 				display = function(list_item)
 					local exploded = h.path_exploder(list_item.value)
@@ -20,15 +24,15 @@ return {
 		-- REQUIRED
 		--
 
-		vim.keymap.set("n", "<leader>kw", function()
+		vim.keymap.set("n", "<leader>kk", function()
 			harpoon:list():add()
 		end)
 
-		vim.keymap.set("n", "<leader>kq", function()
+		vim.keymap.set("n", "<leader>k", function()
 			h.share_harpoon_file()
 		end)
 
-		vim.keymap.set("n", "<leader>kk", function()
+		vim.keymap.set("n", "<leader>km", function()
 			harpoon.ui:toggle_quick_menu(harpoon:list())
 		end)
 		vim.keymap.set("n", "<leader>1", function()

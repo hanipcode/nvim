@@ -240,10 +240,10 @@ return {
 
 				keymap.set("n", "<leader>pi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
 				keymap.set("n", "<leader>pt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
-				keymap.set("n", "<leader>po", "<cmd>Telescope lsp_document_symbols<CR>", opts) -- show lsp document/buffer symbols
-				keymap.set("n", "<leader>pw", "<cmd>Telescope lsp_workspace_symbols<CR>", opts) -- show lsp workspace symbols
-				keymap.set("n", "<leader>pI", "<cmd>Telescope lsp_incoming_calls<CR>", opts) -- lsp incoming calls
-				keymap.set("n", "<leader>pO", "<cmd>Telescope lsp_outgoing_calls<CR>", opts)
+				-- keymap.set("n", "<leader>pw", "<cmd>Telescope lsp_workspace_symbols<CR>", opts) -- show lsp workspace symbols
+				-- keymap.set("n", "<leader>pI", "<cmd>Telescope lsp_incoming_calls<CR>", opts) -- lsp incoming calls
+				-- keymap.set("n", "<leader>pO", "<cmd>Telescope lsp_outgoing_calls<CR>", opts)
+				-- keymap.set("n", "<leader>po", "<cmd>Telescope lsp_document_symbols<CR>", opts) -- show lsp document/buffer symbols
 
 				keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 
