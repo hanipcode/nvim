@@ -1397,3 +1397,45 @@ DEBUG:    [12-04-2025 23:36:39] Stopping component SqliteDB
 DEBUG:    [12-04-2025 23:36:39] Stopping component OpenTelemetryClient
 INFO:     [12-04-2025 23:36:39] Application shutdown complete.
 INFO:     [12-04-2025 23:36:39] Finished server process [58431]
+INFO:     [23-04-2025 10:13:29] Shutting down
+INFO:     [23-04-2025 10:13:29] Shutting down
+INFO:     [23-04-2025 10:13:29] Shutting down
+INFO:     [23-04-2025 10:13:29] Waiting for application shutdown.
+INFO:     [23-04-2025 10:13:29] Waiting for application shutdown.
+DEBUG:    [23-04-2025 10:13:29] Stopping component System
+DEBUG:    [23-04-2025 10:13:29] Stopping component System
+INFO:     [23-04-2025 10:13:29] Waiting for application shutdown.
+DEBUG:    [23-04-2025 10:13:29] Stopping component SegmentAPI
+DEBUG:    [23-04-2025 10:13:29] Stopping component LocalExecutor
+DEBUG:    [23-04-2025 10:13:29] Stopping component LocalSegmentManager
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleAsyncRateLimitEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleRateLimitEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component SegmentAPI
+DEBUG:    [23-04-2025 10:13:29] Stopping component Posthog
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleQuotaEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component LocalExecutor
+DEBUG:    [23-04-2025 10:13:29] Stopping component LocalSegmentManager
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleAsyncRateLimitEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleRateLimitEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component Posthog
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleQuotaEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component SqliteDB
+DEBUG:    [23-04-2025 10:13:29] Stopping component SqliteDB
+DEBUG:    [23-04-2025 10:13:29] Stopping component OpenTelemetryClient
+INFO:     [23-04-2025 10:13:29] Application shutdown complete.
+DEBUG:    [23-04-2025 10:13:29] Stopping component System
+DEBUG:    [23-04-2025 10:13:29] Stopping component OpenTelemetryClient
+INFO:     [23-04-2025 10:13:29] Application shutdown complete.
+INFO:     [23-04-2025 10:13:29] Finished server process [36930]
+INFO:     [23-04-2025 10:13:29] Finished server process [58234]
+DEBUG:    [23-04-2025 10:13:29] Stopping component SegmentAPI
+DEBUG:    [23-04-2025 10:13:29] Stopping component LocalExecutor
+DEBUG:    [23-04-2025 10:13:29] Stopping component LocalSegmentManager
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleAsyncRateLimitEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleRateLimitEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component Posthog
+DEBUG:    [23-04-2025 10:13:29] Stopping component SimpleQuotaEnforcer
+DEBUG:    [23-04-2025 10:13:29] Stopping component SqliteDB
+DEBUG:    [23-04-2025 10:13:29] Stopping component OpenTelemetryClient
+INFO:     [23-04-2025 10:13:29] Application shutdown complete.
+INFO:     [23-04-2025 10:13:29] Finished server process [42220]

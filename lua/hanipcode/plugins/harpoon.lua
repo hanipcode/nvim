@@ -24,48 +24,45 @@ return {
 		-- REQUIRED
 		--
 
-		vim.keymap.set("n", "<leader>kk", function()
+		vim.keymap.set("n", "<leader>kj", function()
 			harpoon:list():add()
 		end)
 
-		vim.keymap.set("n", "<leader>k", function()
+		vim.keymap.set("n", "<leader>kq", function()
 			h.share_harpoon_file()
 		end)
 
-		vim.keymap.set("n", "<leader>km", function()
+		vim.keymap.set("n", "<leader>kk", function()
 			harpoon.ui:toggle_quick_menu(harpoon:list())
 		end)
-		vim.keymap.set("n", "<leader>1", function()
+		vim.keymap.set("n", "<leader>ka", function()
 			harpoon:list():select(1)
 		end)
-		vim.keymap.set("n", "<leader>2", function()
+		vim.keymap.set("n", "<leader>ks", function()
 			harpoon:list():select(2)
 		end)
-		vim.keymap.set("n", "<leader>3", function()
+		vim.keymap.set("n", "<leader>kd", function()
 			harpoon:list():select(3)
 		end)
-		vim.keymap.set("n", "<leader>4", function()
+		vim.keymap.set("n", "<leader>kf", function()
 			harpoon:list():select(4)
 		end)
-		vim.keymap.set("n", "<leader>5", function()
-			harpoon:list():select(5)
+		--
+		vim.keymap.set({ "n" }, "<leader>kla", function()
+			harpoon:list():replace_at(1)
 		end)
-		--
-		-- vim.keymap.set({ "n" }, "<leader>kla", function()
-		-- 	harpoon:list():replace_at(1)
-		-- end)
-		--
-		-- vim.keymap.set({ "n" }, "<leader>kls", function()
-		-- 	harpoon:list():replace_at(2)
-		-- end)
-		--
-		-- vim.keymap.set({ "n" }, "<leader>kld", function()
-		-- 	harpoon:list():replace_at(3)
-		-- end)
-		--
-		-- vim.keymap.set({ "n" }, "<leader>klf", function()
-		-- 	harpoon:list():replace_at(4)
-		-- end)
+
+		vim.keymap.set({ "n" }, "<leader>kls", function()
+			harpoon:list():replace_at(2)
+		end)
+
+		vim.keymap.set({ "n" }, "<leader>kld", function()
+			harpoon:list():replace_at(3)
+		end)
+
+		vim.keymap.set({ "n" }, "<leader>klf", function()
+			harpoon:list():replace_at(4)
+		end)
 		--
 		-- local opts = { noremap = true, silent = true }
 		--
