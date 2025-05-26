@@ -8,6 +8,7 @@ return {
 				chat = {
 					slash_commands = adapter.get_slash_commands(),
 					adapter = "openrouter",
+					keymaps = adapter.get_keymaps(),
 				},
 				inline = {
 					adapter = "openrouter",
@@ -16,6 +17,7 @@ return {
 			adapters = {
 				openrouter = adapter.get_adapter(),
 			},
+			extensions = adapter.get_extensions(),
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>ck", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
@@ -37,8 +39,10 @@ return {
 		"hakonharnes/img-clip.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		"j-hui/fidget.nvim",
+		"ravitemer/codecompanion-history.nvim",
 	},
 	init = function()
 		require("hanipcode.plugins.codecompanion.fidget_spinner"):init()
+		adapter.init_config()
 	end,
 }

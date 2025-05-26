@@ -9,17 +9,81 @@ local available_models = {
 	"anthropic/claude-3.5-sonnet",
 	"openai/gpt-4o-mini",
 }
-local current_model = default_model
+
+local Path = require("plenary.path")
+local config = {
+	current_model = default_model,
+	config_dir = "~/.local/share/nvim/codecompanion-openrouter",
+	config_name = "config.json",
+}
+
+-- Internal function to get Path object
+local function get_config_path(cfg)
+	local dir = Path:new(vim.fn.expand(cfg.config_dir))
+	return dir:joinpath(cfg.config_name)
+end
+
+-- Initialize config directory & file
+function M.init_config()
+	local config_path = get_config_path(config)
+
+	-- Create directory if not exists
+	config_path:parent():mkdir({ parents = true })
+
+	-- Save default config only if file doesn't exist
+	if not config_path:exists() then
+		M.save_config(config)
+	end
+
+	local latest_config = M.read_config()
+	config = latest_config
+end
+
+-- Save config to file (overwrites existing file)
+function M.save_config(cfg)
+	local config_path = get_config_path(cfg)
+
+	-- Remove non-persistable fields
+	local copy = vim.tbl_deep_extend("force", {}, cfg)
+	copy.config_dir = nil
+	copy.config_name = nil
+
+	config_path:write(vim.fn.json_encode(copy), "w")
+end
+
+-- Read config from file
+function M.read_config()
+	local config_path = get_config_path(config)
+	if not config_path:exists() then
+		return nil, "Config file does not exist"
+	end
+
+	local content = config_path:read()
+	local ok, parsed = pcall(vim.fn.json_decode, content)
+	if not ok then
+		return nil, "Failed to parse config"
+	end
+
+	-- Reattach config_dir and config_name if needed
+	parsed.config_dir = config.config_dir
+	parsed.config_name = config.config_name
+	return parsed
+end
 
 function M.select_model()
 	vim.ui.select(available_models, {
 		prompt = "Select  Model:",
 	}, function(choice)
 		if choice then
-			current_model = choice
-			vim.notify("Selected model: " .. current_model)
+			config.current_model = choice
+			M.save_config(config)
+			vim.notify("Selected model: " .. config.current_model)
 		end
 	end)
+end
+
+function M.get_current_model()
+	return config.current_model
 end
 
 ---@param chat CodeCompanion.Chat
@@ -132,6 +196,55 @@ function M.get_slash_commands()
 	}
 end
 
+function M.get_keymaps()
+	return {
+		submit = {
+			modes = { n = "<CR>" },
+			description = "Submit",
+			callback = function(chat)
+				chat:apply_model(config.current_model)
+				chat:submit()
+			end,
+		},
+	}
+end
+
+function M.get_extensions()
+	return {
+		history = {
+			enabled = true,
+			opts = {
+				-- Keymap to open history from chat buffer (default: gh)
+				keymap = "gh",
+				-- Keymap to save the current chat manually (when auto_save is disabled)
+				save_chat_keymap = "sc",
+				-- Save all chats by default (disable to save only manually using 'sc')
+				auto_save = true,
+				-- Number of days after which chats are automatically deleted (0 to disable)
+				expiration_days = 0,
+				-- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
+				picker = "telescope",
+				---Automatically generate titles for new chats
+				auto_generate_title = true,
+				title_generation_opts = {
+					---Adapter for generating titles (defaults to active chat's adapter)
+					adapter = nil, -- e.g "copilot"
+					---Model for generating titles (defaults to active chat's model)
+					model = nil, -- e.g "gpt-4o"
+				},
+				---On exiting and entering neovim, loads the last chat on opening chat
+				continue_last_chat = true,
+				---When chat is cleared with `gx` delete the chat from history
+				delete_on_clearing_chat = true,
+				---Directory path to save the chats
+				dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
+				---Enable detailed logging for history extension
+				enable_logging = false,
+			},
+		},
+	}
+end
+
 function M.get_adapter()
 	local openai = require("codecompanion.adapters.openai")
 	return require("codecompanion.adapters").extend("openai_compatible", {
@@ -165,7 +278,7 @@ function M.get_adapter()
 		},
 		schema = {
 			model = {
-				default = current_model,
+				default = config.current_model,
 			},
 		},
 	})
