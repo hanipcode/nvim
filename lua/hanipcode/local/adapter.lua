@@ -8,6 +8,7 @@ local available_models = {
 	"anthropic/claude-3.7-sonnet",
 	"anthropic/claude-3.5-sonnet",
 	"openai/gpt-4o-mini",
+	"anthropic/claude-sonnet-4",
 }
 
 local Path = require("plenary.path")
@@ -78,6 +79,7 @@ function M.select_model()
 			config.current_model = choice
 			M.save_config(config)
 			vim.notify("Selected model: " .. config.current_model)
+			M.init_config()
 		end
 	end)
 end
@@ -202,6 +204,7 @@ function M.get_keymaps()
 			modes = { n = "<CR>" },
 			description = "Submit",
 			callback = function(chat)
+				local config = M.read_config()
 				chat:apply_model(config.current_model)
 				chat:submit()
 			end,

@@ -4,11 +4,31 @@ return {
 	"olimorris/codecompanion.nvim",
 	config = function()
 		require("codecompanion").setup({
+			display = {
+				diff = {
+					provider = "mini_diff",
+				},
+			},
 			strategies = {
 				chat = {
 					slash_commands = adapter.get_slash_commands(),
 					adapter = "openrouter",
-					keymaps = adapter.get_keymaps(),
+					keymaps = {
+						submit = {
+							modes = { n = "<CR>" },
+							description = "Submit",
+							callback = function(chat)
+								local config = adapter.read_config()
+								chat:apply_model(config.current_model)
+								chat:submit()
+							end,
+						},
+					},
+					roles = {
+						llm = function(_adapter)
+							return "CodeCompanion (" .. _adapter.model.name .. ")"
+						end,
+					},
 				},
 				inline = {
 					adapter = "openrouter",
